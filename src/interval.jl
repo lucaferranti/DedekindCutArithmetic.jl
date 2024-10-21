@@ -107,8 +107,29 @@ function Base.:*(d1::DyadicInterval, d2::DyadicInterval)
     end
 end
 
+function Base.:(==)(i1::DyadicInterval, i2::DyadicInterval)
+    return low(i1) == low(i2) && high(i1) == high(i2)
+end
+
 Base.:<(i1::AbstractDyadic, i2::AbstractDyadic) = high(i1) < low(i2)
 Base.:<=(i1::AbstractDyadic, i2::AbstractDyadic) = high(i1) <= low(i2)
 
 Base.:>(i1::AbstractDyadic, i2::AbstractDyadic) = low(i1) > high(i2)
 Base.:>=(i1::AbstractDyadic, i2::AbstractDyadic) = low(i1) >= high(i2)
+
+#########
+# Utils #
+#########
+
+"""
+Given precision `p` and interval `i``, compute a precision which is better than `p` and
+is suitable for working with intervals of width `i`.
+
+Taken from: https://github.com/andrejbauer/marshall/blob/c9f1f6466e879e8db11a12b9bc030e62b07d8bd2/src/eval.ml#L22-L26
+"""
+function make_prec(p::Int64, i::DyadicInterval)
+    w = width(i)
+    e1 = get_exp(w)
+    e2 = max(get_exp(low(i)), get_exp(high(i)))
+    max(2, p, (-5 * (e1 - e2)) >> 2)
+end

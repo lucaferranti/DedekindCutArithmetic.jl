@@ -9,13 +9,8 @@ end
 get_mantissa(d::DyadicReal) = d.m
 get_exp(d::DyadicReal) = -d.e
 
-const _SUPERSCRIPTS = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]
-function to_superscript(n::Integer)
-    join(_SUPERSCRIPTS[reverse(digits(n)) .+ 1])
-end
 function Base.show(io::IO, ::MIME"text/plain", d::DyadicReal)
     print(io, float(d))
-    #print(io, d.m, " ⋅ 2⁻", to_superscript(d.e))
 end
 
 ###############
@@ -28,8 +23,10 @@ function Base.BigFloat(d::DyadicReal, mode::RoundingMode = RoundNearest; precisi
 end
 function (::Type{T})(
         d::DyadicReal, mode::RoundingMode = RoundNearest) where {T <: AbstractFloat}
-    Float64(d.m // (big(1) << d.e), mode)
+    T(d.m // (big(1) << d.e), mode)
 end
+
+Rational(d::DyadicReal) = d.m // (big(1) << d.e)
 
 ############
 # Rounding #
@@ -87,22 +84,16 @@ end
 
 Base.:>>(d::DyadicReal, n::Int64) = DyadicReal(d.m, d.e + n)
 
+function Base.:<<(d::DyadicReal, n::Int64)
+    return n >= d.e ? DyadicReal(d.m << (n - d.e), 0) : DyadicReal(d.m, d.e - n)
+end
+
 Base.abs(d::DyadicReal) = DyadicReal(abs(d.m), d.e)
 
-Base.:(==)(d1::DyadicReal, d2::DyadicReal) = d1.e == d2.e && d1.m == d2.m
+Base.:(==)(d1::DyadicReal, d2::DyadicReal) = (d1.m << d2.e) == (d2.m << d1.e)
 
-function Base.:<(d1::DyadicReal, d2::DyadicReal)
-    (d1.m << d2.e) < (d2.m << d1.e)
-end
-
-function Base.:>(d1::DyadicReal, d2::DyadicReal)
-    (d1.m << d2.e) > (d2.m << d1.e)
-end
-
-function Base.:<=(d1::DyadicReal, d2::DyadicReal)
-    (d1.m << d2.e) <= (d2.m << d1.e)
-end
-
-function Base.:>=(d1::DyadicReal, d2::DyadicReal)
-    (d1.m << d2.e) >= (d2.m << d1.e)
+for op in (:<, :>, :<=, :>=)
+    @eval function Base.$op(d1::DyadicReal, d2::DyadicReal)
+        $op((d1.m << d2.e), (d2.m << d1.e))
+    end
 end

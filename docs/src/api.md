@@ -1,11 +1,5 @@
 # [Reference](@id reference)
 
-## Contents
-
-```@contents
-Pages = ["api.md"]
-```
-
 ## Index
 
 ```@index

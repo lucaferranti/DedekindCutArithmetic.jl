@@ -1,5 +1,3 @@
-abstract type AbstractQuantifier end
-
 """
 Check whether ``∃ x ∈ dom : prop(x)``
 """
@@ -8,10 +6,10 @@ function exists(dom::DyadicInterval, prop::Function)::Bool
 
     # try to avoid bisection by checking for monotonicity
     d = ForwardDiff.derivative(prop, dom)
-    low(d) > 0 && high(prop(high(dom))) >= 0 && return false
-    high(d) < 0 && high(prop(low(dom))) >= 0 && return false
+    low(d) > 0 && low(prop(low(dom))) >= 0 && return false
+    high(d) < 0 && low(prop(high(dom))) >= 0 && return false
 
-    low(prop(dual(dom))) >= 0 && return false
+    high(prop(dual(dom))) >= 0 && return false
 
     i1, i2 = split(dom)
     exists(i1, prop) || exists(i2, prop)

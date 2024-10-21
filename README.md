@@ -85,8 +85,8 @@ Contributions are welcome! Here is a small decision tree with useful links. More
 [devdoc-img]: https://img.shields.io/badge/docs-dev-blue.svg
 [devdoc-url]: https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/
 
-[ci-img]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/CI.yml/badge.svg?branch=main
-[ci-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/CI.yml?query=branch%3Amain
+[ci-img]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/Test.yml/badge.svg?branch=main
+[ci-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/Test.yml?query=branch%3Amain
 
 [cov-img]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl/branch/main/graph/badge.svg
 [cov-url]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl

@@ -11,6 +11,8 @@ end
 RationalCauchyCut(x::Rational) = RationalCauchyCut(numerator(x), denominator(x))
 RationalCauchyCut(x::AbstractFloat) = RationalCauchyCut(rationalize(x))
 
+DyadicInterval(d::RationalCauchyCut) = refine!(d)
+
 """
 Evaluate the Cauchy sequence representing a rational number with `n` bits of precision.
 """
@@ -18,8 +20,6 @@ function refine!(d::RationalCauchyCut; precision = 53, max_iter = 1000)
     num = (d.num << precision) ÷ d.den
     DyadicInterval(DyadicReal(num - 1, precision), DyadicReal(num + 1, precision))
 end
-
-DyadicInterval(d::RationalCauchyCut) = refine!(d)
 
 """
 Representation of a real number ``x`` as a dedekind cut.
@@ -57,51 +57,6 @@ function refine!(d::DedekindCut; precision = 53, max_iter = 1000)
     return d.mpa
 end
 
-function Base.:<(d1::AbstractDedekindReal, d2::AbstractDedekindReal)
-    p = 53
-    i1, i2 = DyadicInterval(d1), DyadicInterval(d2)
-    while overlaps(i1, i2)
-        i1 = refine!(d1; precision = p)
-        i2 = refine!(d2; precision = p)
-        p *= 2
-    end
-    i1 < i2
-end
-
-function Base.:>(d1::AbstractDedekindReal, d2::Union{Integer, AbstractFloat, Rational})
-    d1 > AbstractDedekindReal(d2)
-end
-function Base.:>(d1::AbstractDedekindReal, d2::AbstractDedekindReal)
-    p = 53
-    i1, i2 = DyadicInterval(d1), DyadicInterval(d2)
-    while overlaps(i1, i2)
-        i1 = refine!(d1; precision = p)
-        i2 = refine!(d2; precision = p)
-        p *= 2
-    end
-    i1 > i2
-end
-
-function Base.sqrt(a::AbstractDedekindReal)
-    fsqrt = isqrt(low(a).m >> low(a).e)
-    upsqrt = isqrt((high(a).m >> high(a).e) + 1) + 1
-    i = DyadicInterval(fsqrt, upsqrt)
-    DedekindCut(x -> x < 0 || x * x < a, x -> x > 0 && x * x > a, i)
-end
-
-"""
-Given precision `p` and interval `i``, compute a precision which is better than `p` and
-is suitable for working with intervals of width `i`.
-
-Taken from: https://github.com/andrejbauer/marshall/blob/c9f1f6466e879e8db11a12b9bc030e62b07d8bd2/src/eval.ml#L22-L26
-"""
-function make_prec(p::Int64, i::DyadicInterval)
-    w = width(i)
-    e1 = get_exp(w)
-    e2 = max(get_exp(low(i)), get_exp(high(i)))
-    max(2, p, (-5 * (e1 - e2)) >> 2)
-end
-
 """
 Composite cut lazily representing the result of applying  an arithmetic unary operation `f` to `child`.
 """
@@ -110,11 +65,13 @@ struct UnaryCompositeCut{F} <: AbstractCut
     child::AbstractCut
 end
 
+DyadicInterval(d::UnaryCompositeCut) = d.f(DyadicInterval(d.child))
+
 function refine!(d::UnaryCompositeCut; precision = 53, max_iter = 1000)
     (; f, child) = d
     i = DyadicInterval(child)
     res = f(i)
-    for i in 0:max_iter
+    for _ in 0:max_iter
         width(res) < DyadicReal(1, precision) && return res
         p = make_prec(precision + 3, i)
         i = refine!(child, precision = p)
@@ -123,8 +80,6 @@ function refine!(d::UnaryCompositeCut; precision = 53, max_iter = 1000)
     @warn "Could not reach desired precision within maximum number of iterations, final result may be less accurate than requested"
     return res
 end
-
-Base.:-(d::AbstractDedekindReal) = UnaryCompositeCut(-, d)
 
 """
 Composite cut lazily representing the result of applying  an arithmetic binary operation `f` to `child1` and `child2`.
@@ -154,6 +109,32 @@ function refine!(d::BinaryCompositeCut; precision = 53, max_iter = 1000)
     return res
 end
 
+#########################
+# Arithmetic operations #
+#########################
+
+Base.:-(d::AbstractDedekindReal) = UnaryCompositeCut(-, d)
+
 Base.:+(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(+, d1, d2)
 Base.:-(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(-, d1, d2)
 Base.:*(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(*, d1, d2)
+
+for op in (:<, :>, :<=, :>=)
+    @eval function Base.$op(d1::AbstractDedekindReal, d2::AbstractDedekindReal)
+        p = 53
+        i1, i2 = DyadicInterval(d1), DyadicInterval(d2)
+        while overlaps(i1, i2)
+            i1 = refine!(d1; precision = p)
+            i2 = refine!(d2; precision = p)
+            p *= 2
+        end
+        return $op(i1, i2)
+    end
+end
+
+function Base.sqrt(a::AbstractDedekindReal)
+    fsqrt = isqrt(low(a).m >> low(a).e)
+    upsqrt = isqrt((high(a).m >> high(a).e) + 1) + 1
+    i = DyadicInterval(fsqrt, upsqrt)
+    DedekindCut(x -> x < 0 || x * x < a, x -> x > 0 && x * x > a, i)
+end

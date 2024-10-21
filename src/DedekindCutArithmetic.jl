@@ -1,5 +1,5 @@
 """
-  DedelomdCutArithmetic
+  DedekindCutArithmetic
 
 Julia library implementing exact real arithmetic using Dedekind cuts and abstract stone duality.
 """
@@ -10,9 +10,11 @@ using FunctionWrappers: FunctionWrapper
 using ForwardDiff
 
 export DyadicReal, DyadicInterval, DedekindCut, RationalCauchyCut, BinaryCompositeCut, @cut,
-       refine!, dual,
-       width, midpoint, radius, thirds, low,
+       refine!, dual, overlaps,
+       width, midpoint, radius, thirds, low, high, isforward, isbackward,
        exists, forall, @∀, @∃
+
+const _Real = Union{Integer, AbstractFloat, Rational}
 
 include("abstract_interface.jl")
 include("dyadic.jl")
