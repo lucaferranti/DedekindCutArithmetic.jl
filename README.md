@@ -13,9 +13,9 @@ A Julia library for exact real arithmetic using [Dedekind cuts](https://en.wikip
 
 ## Installation
 
-1. If you haven't already, install Julia. The easiest way is to install [Juliaup](https://github.com/JuliaLang/juliaup#installation). This allows to easily manage julia versions.
+1. If you haven't already, install Julia. The easiest way is to install [Juliaup](https://github.com/JuliaLang/juliaup#installation). This allows to easily install and manage julia versions.
 
-2. Open the terminal and start a julia session by simply typing `julia`
+2. Open the terminal and start a julia session by typing `julia`.
 
 3. Install the library by typing
 
@@ -33,7 +33,7 @@ A Julia library for exact real arithmetic using [Dedekind cuts](https://en.wikip
 
 ## Quickstart example
 
-The following snippet shows how to define the maximum of a function $f: [0, 1] \rightarrow \mathbb{R}$ using Dedekind cuts and how to use it to actually compute the maximum of a given function.
+The following snippet shows how to define the squareroot of a number and the maximum of a function $f: [0, 1] \rightarrow \mathbb{R}$ using Dedekind cuts. It also shows this definition is actually computable and can be used to give a tight rigorous bound of the value.
 
 ```julia
 using DedekindCutArithmetic
@@ -41,12 +41,14 @@ using DedekindCutArithmetic
 # Textbook example of dedekind cuts, define square-root
 my_sqrt(a) = @cut x ∈ ℝ, (x < 0) ∨ (x * x < a), (x > 0) ∧ (x * x > a)
 
-sqrt2 = my_sqrt(2); # lazy computation, however it is evaluated to 53 bits precision when printing
+# lazy computation, however it is automatically evaluated to 53 bits of precision if printed in the REPL.
+sqrt2 = my_sqrt(2);
 
-refine!(sqrt2; precision=80) # evaluate to 80 bits precision
+# evaluate to 80 bits precision, this gives an interval with width <2⁻⁸⁰ containing √2
+refine!(sqrt2; precision=80)
 # [1.4142135623730949, 1.4142135623730951]
 
-# Define maximum of a function f: [0, 1] → ℝ as a dedekind cut
+# Define maximum of a function f: [0, 1] → ℝ as a Dedekind cut
 my_max(f::Function) = @cut a ∈ ℝ, ∃(x ∈ [0, 1] : f(x) > a), ∀(x ∈ [0, 1] : f(x) < a)
 
 f = x -> x * (1 - x)
@@ -60,7 +62,7 @@ refine!(fmax) # evaluate to 53 bits of precision by default
 ## Documentation
 
 - [**STABLE**][stabledoc-url]: Documentation of the latest release
-- [**DEV**][devdoc-url]: Documentation of the version on main
+- [**DEV**][devdoc-url]: Documentation of the in-development version on main
 
 ## Contributing
 

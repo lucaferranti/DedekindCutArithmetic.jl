@@ -21,7 +21,6 @@ makedocs(;
         canonical = "https://lucaferranti.github.io/DedekindCutArithmetic.jl"),
     pages = [
         "Home" => "index.md",
-        "Tutorial" => "tutorial.md",
         "API" => "api.md",
         "Contributing" => ["90-contributing.md", "91-developer.md"]
     ])

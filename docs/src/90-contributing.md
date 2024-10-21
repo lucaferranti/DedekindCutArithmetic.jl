@@ -15,7 +15,7 @@ All interactions should folow the [Code of Conduct](https://github.com/lucaferra
 
 If you need help using `DedekindCutArithmetic.jl`, you can use the [helpdesk](https://github.com/lucaferranti/DedekindCutArithmetic.jl/discussions/categories/helpdesk) category to ask for help. This is preferable over issues, which are meant for bugs and feature requests, because discussions do not get closed once fixed and remain browsable for others.
 
-There is also a [show and tell](https://github.com/lucaferranti/DedekindCutArithmetic.jl/discussions/categories/show-and-tell) category to share with the world your work using DedekindCutArithmetic.jl. If your work involves a new application of `DedekindCutArithmetic.jl` and you also want it featured in the Applications section in the documentation, let us know (in the element chat or in an issue). You will get help with the workflow and setup, but you are expected to do the writing 😃 .
+There is also a [show and tell](https://github.com/lucaferranti/DedekindCutArithmetic.jl/discussions/categories/show-and-tell) category to share with the world your work using DedekindCutArithmetic.jl. If your work involves a new application of `DedekindCutArithmetic.jl` and you also want it featured in the Applications section in the documentation, let us know. You will get help with the workflow and setup, but you are expected to do the writing 😃 .
 
 ## Opening issues
 

@@ -122,7 +122,7 @@ Base.:>=(i1::AbstractDyadic, i2::AbstractDyadic) = low(i1) >= high(i2)
 #########
 
 """
-Given precision `p` and interval `i``, compute a precision which is better than `p` and
+Given precision `p` and interval `i`, compute a precision which is better than `p` and
 is suitable for working with intervals of width `i`.
 
 Taken from: https://github.com/andrejbauer/marshall/blob/c9f1f6466e879e8db11a12b9bc030e62b07d8bd2/src/eval.ml#L22-L26
