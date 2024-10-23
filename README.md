@@ -82,10 +82,10 @@ Contributions are welcome! Here is a small decision tree with useful links. More
 [license-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/blob/main/LICENSE
 
 [stabledoc-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[stabledoc-url]: https://lucaferranti.github.io/DedekindCutArithmetic.jl/stable/
+[stabledoc-url]: https://lucaferranti.github.io/DedekindCutArithmetic.jl/stable
 
 [devdoc-img]: https://img.shields.io/badge/docs-dev-blue.svg
-[devdoc-url]: https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/
+[devdoc-url]: https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev
 
 [ci-img]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/Test.yml/badge.svg?branch=main
 [ci-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/actions/workflows/Test.yml?query=branch%3Amain

@@ -22,7 +22,8 @@ makedocs(;
     pages = [
         "Home" => "index.md",
         "API" => "api.md",
-        "Contributing" => ["90-contributing.md", "91-developer.md"]
+        "Contributing" => ["90-contributing.md", "91-developer.md"],
+        "Release notes" => "changelog.md"
     ])
 
 ##########
