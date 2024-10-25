@@ -66,6 +66,8 @@ refine!(fmax) # evaluate to 53 bits of precision by default
 - [**STABLE**][stabledoc-url]: Documentation of the latest release
 - [**DEV**][devdoc-url]: Documentation of the in-development version on main
 
+A good starting point is the [beginner tutorial](https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/tutorial/)
+
 ## 🤝 Contributing
 
 Contributions are welcome! Here is a small decision tree with useful links. More details in the [contributor's guide](https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/90-contributing).
