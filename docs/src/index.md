@@ -6,11 +6,11 @@ CurrentModule = DedekindCutArithmetic
 
 A Julia library for exact real arithmetic using [Dedekind cuts](https://en.wikipedia.org/wiki/Dedekind_cut) and [Abstract Stone Duality](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=02c685856371aac16ce81bf7467ffc4d533d48ff). Heavily inspired by the [Marshall](https://github.com/andrejbauer/marshall) programming language.
 
-## Installation
+## 💾 Installation
 
-1. If you haven't already, install Julia. The easiest way is to install [Juliaup](https://github.com/JuliaLang/juliaup#installation). This allows to easily install and manage julia versions.
+1. If you haven't already, install Julia. The easiest way is to install [Juliaup](https://github.com/JuliaLang/juliaup#installation). This allows to easily install and manage Julia versions.
 
-2. Open the terminal and start a julia session by typing `julia`.
+2. Open the terminal and start a Julia session by typing `julia`.
 
 3. Install the library by typing
 
@@ -26,9 +26,9 @@ A Julia library for exact real arithmetic using [Dedekind cuts](https://en.wikip
 
 5. That's it, have fun!
 
-## Quickstart example
+## 🌱 Quickstart example
 
-The following snippet shows how to define the squareroot of a number and the maximum of a function $f: [0, 1] \rightarrow \mathbb{R}$ using Dedekind cuts. It also shows this definition is actually computable and can be used to give a tight rigorous bound of the value.
+The following snippet shows how to define the square root of a number and the maximum of a function $f: [0, 1] \rightarrow \mathbb{R}$ using Dedekind cuts. It also shows this definition is actually computable and can be used to give a tight rigorous bound on the value.
 
 ```julia
 using DedekindCutArithmetic
@@ -54,7 +54,7 @@ refine!(fmax) # evaluate to 53 bits of precision by default
 # [0.24999999999999992, 0.25000000000000006]
 ```
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Here is a small decision tree with useful links. More details in the [contributor's guide](https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/90-contributing).
 
@@ -62,7 +62,7 @@ Contributions are welcome! Here is a small decision tree with useful links. More
 
 - If you find a bug or want to suggest a new feature, [open an issue](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues).
 
-- You are also encouraged to send pull requests (PRs). For small changes, it is ok to open a PR directly. For bigger changes, it is advisable to discuss it in an issue first. Before opening a PR, make sure to check the [contributor's guide](https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/90-contributing).
+- You are also encouraged to send pull requests (PRs). For small changes, it is ok to open a PR directly. For bigger changes, it is advisable to discuss it in an issue first. Before opening a PR, make sure to check the [developer's guide](https://lucaferranti.github.io/DedekindCutArithmetic.jl/dev/91-developer).
 
 ## Copyright
 

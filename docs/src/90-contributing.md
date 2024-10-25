@@ -27,7 +27,7 @@ We follow the [ColPrac guide for collaborative practices](https://github.com/Sci
 
 If you found an issue that interests you, comment on that issue what your plans are.
 If the solution to the issue is clear, you can immediately create a pull request.
-Otherwise, say what yourfollow proposed solution is and wait for a discussion around it.
+Otherwise, say what your proposed solution is and wait for a discussion around it.
 
 For small changes (typos, trivial bug fixes) it is ok to open a PR directly even without an associated issue. For non-trivial changes, please open an issue first.
 
