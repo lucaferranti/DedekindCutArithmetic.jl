@@ -3,7 +3,7 @@
 !!! note "Contributing guidelines"
     If you haven't, please read the [Contributing guidelines](90-contributing.md) first.
 
-If you want to make contributions to this package that involves code, then this guide is for you.
+If you want to make contributions to this package, then this guide is for you.
 
 ## First time clone
 
@@ -12,9 +12,9 @@ If you want to make contributions to this package that involves code, then this 
 
 If this is the first time you work with this repository, follow the instructions below to clone the repository.
 
-1. Fork this repo
-2. Clone your repo (this will create a `git remote` called `origin`)
-3. Add this repo as a remote:
+1. Fork this repository
+2. Clone your fork (this will create a `git remote` called `origin`)
+3. Add the original repository as a remote:
 
    ```bash
    git remote add upstream https://github.com/lucaferranti/DedekindCutArithmetic.jl
@@ -23,18 +23,21 @@ If this is the first time you work with this repository, follow the instructions
 This will ensure that you have two remotes in your git: `origin` and `upstream`.
 You will create branches and push to `origin`, and you will fetch and update your local `main` branch from `upstream`.
 
+!!! warning "Warning"
+    From now on, these instructions assume you are in the `DedekindCutArithmetic.jl` folder
+
 ## Linting and formatting
 
 Install a plugin on your editor to use [EditorConfig](https://editorconfig.org).
 This will ensure that your editor is configured with important formatting settings.
 
 We use [https://pre-commit.com](https://pre-commit.com) to run the linters and formatters.
-In particular, the Julia code is formatted using [JuliaFormatter.jl](https://github.com/domluna/JuliaFormatter.jl), so please install it globally first:
+In particular, the Julia code is formatted using [JuliaFormatter.jl](https://github.com/domluna/JuliaFormatter.jl), so please install it globally first as follows (the following snippet is copy-pastable into the REPL)
 
 ```julia-repl
-julia> # Press ]
-pkg> activate
-pkg> add JuliaFormatter
+julia> import Pkg;
+pkg> Pkg.activate();
+pkg> Pkg.add("JuliaFormatter")
 ```
 
 To install `pre-commit`, we recommend using [pipx](https://pipx.pypa.io) as follows:
@@ -66,6 +69,12 @@ As with most Julia packages, you can just open Julia in the repository folder, a
 julia> # press ]
 pkg> activate .
 pkg> test
+```
+
+Each test file is also stand-alone, hence to run a specific file you can `include` that from the REPL
+
+```julia-repl
+julia> include("test/test-cuts.jl")
 ```
 
 ## Working on a new issue
@@ -126,13 +135,21 @@ We try to keep a linear history in this repo, so it is important to keep your br
 
 ## Building and viewing the documentation locally
 
-To build the documentation locally, simply run
+The first time you want to build the documentation locally, you will need to install all needed dependencies. To do so, run
+
+```bash
+julia docs/setup.jl
+```
+
+This needs to be done the fist time (i.e. if you don't have a `docs/Manifest.toml` file). The setup script needs to be rerun only if some external libraries used in the documentation example change.
+
+Next, you can build the documentation locally by running
 
 ```bash
 julia docs/liveserver.jl
 ```
 
-This will build the documentation and open a preview in your browser. Whenever you make some changes in the documentation files, the preview will also update live.
+This will open a preview of the documentation in your browser and watch the documentation source files, meaning the preview will automatically update on every documentation file change.
 
 ## Making a new release
 
