@@ -103,10 +103,6 @@ Contributions are welcome! Here is a small decision tree with useful links. More
 [cov-img]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl/branch/main/graph/badge.svg
 [cov-url]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl
 
-<!--
-[pkgeval-img]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DedekindCutArithmetic.svg
-[pkgeval-url]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DedekindCutArithmetic.html
--->
 [coc-img]: https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg
 [coc-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/blob/main/CODE_OF_CONDUCT.md
 
