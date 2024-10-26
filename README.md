@@ -2,7 +2,7 @@
 
 |**Info**|**Documentation**|**Build status**|**Contributing**|
 |:------:|:--------------:|:---------------:|:--------------:|
-|[![version][ver-img]][ver-url] [![license: MIT][license-img]][license-url]<br/>[![DOI][doi-img]][doi-url]|[![Stable Documentation][stabledoc-img]][stabledoc-url] [![In development documentation][devdoc-img]][devdoc-url]|[![Build Status][ci-img]][ci-url] [![Coverage][cov-img]][cov-url]<br/>[![pkgeval-img]][pkgeval-url]|[![Contributor Covenant][coc-img]][coc-url] [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages][colprac-img]][colprac-url]<br/>[![SciML Code Style][style-img]][style-url]|
+|[![version][ver-img]][ver-url] [![license: MIT][license-img]][license-url]<br/>[![DOI][doi-img]][doi-url]|[![Stable Documentation][stabledoc-img]][stabledoc-url] [![In development documentation][devdoc-img]][devdoc-url]|[![Build Status][ci-img]][ci-url] [![Coverage][cov-img]][cov-url]|[![Contributor Covenant][coc-img]][coc-url] [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages][colprac-img]][colprac-url]<br/>[![SciML Code Style][style-img]][style-url]|
 
 A Julia library for exact real arithmetic using [Dedekind cuts](https://en.wikipedia.org/wiki/Dedekind_cut) and [Abstract Stone Duality](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=02c685856371aac16ce81bf7467ffc4d533d48ff). Heavily inspired by the [Marshall](https://github.com/andrejbauer/marshall) programming language.
 
@@ -103,9 +103,10 @@ Contributions are welcome! Here is a small decision tree with useful links. More
 [cov-img]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl/branch/main/graph/badge.svg
 [cov-url]: https://codecov.io/gh/lucaferranti/DedekindCutArithmetic.jl
 
+<!--
 [pkgeval-img]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DedekindCutArithmetic.svg
 [pkgeval-url]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/D/DedekindCutArithmetic.html
-
+-->
 [coc-img]: https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg
 [coc-url]: https://github.com/lucaferranti/DedekindCutArithmetic.jl/blob/main/CODE_OF_CONDUCT.md
 
