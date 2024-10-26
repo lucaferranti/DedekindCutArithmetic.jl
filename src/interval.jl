@@ -107,6 +107,22 @@ function Base.:*(d1::DyadicInterval, d2::DyadicInterval)
     end
 end
 
+function Base.:^(i::DyadicInterval, p::Int64)
+    p < 0 && throw(ArgumentError("Negative exponents not supported yet"))
+    lo, hi = low(i), high(i)
+    isodd(p) && return DyadicInterval(lo^p, hi^p)
+    lop, hip = if lo >= 0
+        hi >= 0 ? (lo^p, hi^p) : (max(hi^p, lo^p), zero(DyadicReal))
+    else
+        hi >= 0 ? (zero(DyadicReal), max(hi^p, lo^p)) : (hi^p, lo^p)
+    end
+    DyadicInterval(lop, hip)
+end
+
+###############
+# Comparisons #
+###############
+
 function Base.:(==)(i1::DyadicInterval, i2::DyadicInterval)
     return low(i1) == low(i2) && high(i1) == high(i2)
 end

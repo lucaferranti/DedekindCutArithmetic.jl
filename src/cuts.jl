@@ -138,3 +138,7 @@ function Base.sqrt(a::AbstractDedekindReal)
     i = DyadicInterval(fsqrt, upsqrt)
     DedekindCut(x -> x < 0 || x * x < a, x -> x > 0 && x * x > a, i)
 end
+
+function Base.:^(x::AbstractCut, p::Integer)
+    UnaryCompositeCut(Base.Fix2(^, p), x)
+end

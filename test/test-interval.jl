@@ -49,4 +49,13 @@ end
 
     @test !(DyadicInterval(0, 2) < DyadicInterval(1, 3))
     @test !(DyadicInterval(1, 3) > DyadicInterval(0, 2))
+
+    @test DyadicInterval(1, 2)^2 == DyadicInterval(1, 4)
+    @test DyadicInterval(3, 2)^2 == DyadicInterval(9, 4)
+    @test DyadicInterval(-3, 2)^2 == DyadicInterval(0, 9)
+    @test DyadicInterval(2, -3)^2 == DyadicInterval(9, 0)
+    @test DyadicInterval(-3, -2)^2 == DyadicInterval(4, 9)
+
+    @test DyadicInterval(-2, 2)^3 == DyadicInterval(-8, 8)
+    @test DyadicInterval(2, -2)^3 == DyadicInterval(8, -8)
 end
