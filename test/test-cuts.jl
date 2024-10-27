@@ -23,6 +23,9 @@ using Test
     ia3 = refine!(a^3)
     @test width(ia3) < DyadicReal(1, 53)
     @test Rational(low(ia3)) < 1 // 1000 < Rational(high(ia3))
+
+    @test zero(ia2) == zero(typeof(ia2)) == DyadicReal(0, 0)
+    @test one(ia2) == one(typeof(ia2)) == DyadicReal(1, 0)
 end
 
 @testset "square root" begin

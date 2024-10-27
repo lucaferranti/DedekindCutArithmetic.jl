@@ -109,6 +109,15 @@ function refine!(d::BinaryCompositeCut; precision = 53, max_iter = 1000)
     return res
 end
 
+##################
+# Real interface #
+##################
+
+Base.zero(::AbstractCut) = zero(DyadicReal)
+Base.zero(::Type{<:AbstractCut}) = zero(DyadicReal)
+Base.one(::AbstractCut) = one(DyadicReal)
+Base.one(::Type{<:AbstractCut}) = one(DyadicReal)
+
 #########################
 # Arithmetic operations #
 #########################
