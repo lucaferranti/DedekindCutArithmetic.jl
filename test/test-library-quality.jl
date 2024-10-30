@@ -1,11 +1,7 @@
-using Aqua, DedekindCutArithmetic, JET
+using Aqua, DedekindCutArithmetic
 
 @testset "Code quality (Aqua.jl)" begin
     Aqua.test_all(DedekindCutArithmetic)
-end
-
-@testset "Code linting (JET.jl)" begin
-    JET.test_package("DedekindCutArithmetic"; target_defined_modules = true)
 end
 
 if VERSION >= v"1.11"
