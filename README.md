@@ -1,4 +1,7 @@
-# DedekindCutArithmetic.jl
+<p align="center">
+<img width="200" src="./docs/src/assets/logo.svg" alt="logo"/>
+</p>
+<h1 align="center">DedekindCutArithmetic.jl</h1>
 
 |**Info**|**Documentation**|**Build status**|**Contributing**|
 |:------:|:--------------:|:---------------:|:--------------:|
