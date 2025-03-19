@@ -13,6 +13,8 @@ function Base.show(io::IO, ::MIME"text/plain", d::DyadicReal)
     print(io, float(d))
 end
 
+@inline ilog2(x::BigInt) = Base.GMP.MPZ.sizeinbase(x, 2) - 1
+
 ###############
 # Conversions #
 ###############
@@ -41,6 +43,40 @@ end
 Base.round(::Type{BigInt}, d::DyadicReal) = get_mantissa(round(d, RoundNearest))
 Base.floor(::Type{BigInt}, d::DyadicReal) = get_mantissa(round(d, RoundDown))
 Base.ceil(::Type{BigInt}, d::DyadicReal) = get_mantissa(round(d, RoundUp))
+
+######################
+# Inexact operations #
+######################
+
+function _inv(d::DyadicReal, ::RoundingMode{:Down}; precision = DEFAULT_PRECISION)
+    num = (big(1) << (d.e + precision)) ÷ d.m
+    DyadicReal(num - 1, precision)
+end
+
+function _inv(d::DyadicReal, ::RoundingMode{:Up}; precision = DEFAULT_PRECISION)
+    num = (big(1) << (d.e + precision)) ÷ d.m
+    DyadicReal(num + 1, precision)
+end
+
+function _inv(d::DyadicReal, ::RoundingMode{:Nearest}; precision = DEFAULT_PRECISION)
+    num = (big(1) << (d.e + precision)) ÷ d.m
+    DyadicReal(num, precision)
+end
+
+function Base.inv(
+        d::DyadicReal, r::RoundingMode = RoundNearest; precision = DEFAULT_PRECISION)
+    0 ∈ d && throw(DivideError())
+    if iszero(abs(d.m) & (abs(d.m) - 1))
+        DyadicReal(big(1) << d.e, ilog2(d.m))
+    else
+        _inv(d, r; precision)
+    end
+end
+
+function Base.:/(
+        d1::DyadicReal, d2::DyadicReal, r = RoundNearest; precision = DEFAULT_PRECISION)
+    d1 * inv(d2, r; precision)
+end
 
 #################
 # Cut interface #

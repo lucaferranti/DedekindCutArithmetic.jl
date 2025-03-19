@@ -16,6 +16,8 @@ export DyadicReal, DyadicInterval, DedekindCut, RationalCauchyCut, BinaryComposi
 
 const _Real = Union{Integer, AbstractFloat, Rational}
 
+const DEFAULT_PRECISION = 53
+
 include("abstract_interface.jl")
 include("dyadic.jl")
 include("interval.jl")
