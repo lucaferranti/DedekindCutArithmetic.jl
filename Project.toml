@@ -10,7 +10,7 @@ MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
 
 [compat]
 Aqua = "0.8.9"
-ForwardDiff = "0.10"
+ForwardDiff = "0.10, 1"
 FunctionWrappers = "1.1.3"
 MacroTools = "0.5.13"
 SafeTestsets = "0.1.0"
