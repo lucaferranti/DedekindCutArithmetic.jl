@@ -30,7 +30,7 @@ width(i::DyadicInterval) = abs(i.hi - i.lo)
 radius(i::DyadicInterval) = width(i) >> 1
 midpoint(i::DyadicInterval) = (i.lo + i.hi) >> 1
 
-refine!(i::DyadicInterval; precision = 53, max_iter = 1000) = i
+refine!(i::DyadicInterval; precision = DEFAULT_PRECISION, max_iter = 1000) = i
 
 "Split the interval in two halves."
 function Base.split(i::DyadicInterval)
@@ -51,17 +51,17 @@ function Base.show(io::IO, ::MIME"text/plain", d::DyadicInterval)
         ", ", BigFloat(high(d), RoundUp; precision = 53), "]")
 end
 
-Base.:+(d::DyadicInterval) = d
-Base.:-(d::DyadicInterval) = DyadicInterval(-d.hi, -d.lo)
+Base.:+(d::DyadicInterval; precision = DEFAULT_PRECISION) = d
+Base.:-(d::DyadicInterval; precision = DEFAULT_PRECISION) = DyadicInterval(-d.hi, -d.lo)
 
-function Base.:+(d1::AbstractDyadic, d2::AbstractDyadic)
+function Base.:+(d1::AbstractDyadic, d2::AbstractDyadic; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) + low(d2), high(d1) + high(d2))
 end
-function Base.:-(d1::DyadicInterval, d2::DyadicInterval)
+function Base.:-(d1::DyadicInterval, d2::DyadicInterval; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) - high(d2), high(d1) - low(d2))
 end
 
-function Base.:*(d1::DyadicInterval, d2::DyadicInterval)
+function Base.:*(d1::DyadicInterval, d2::DyadicInterval; precision = DEFAULT_PRECISION)
     a, b = low(d1), high(d1)
     c, d = low(d2), high(d2)
     if a <= 0 && b <= 0
@@ -107,7 +107,7 @@ function Base.:*(d1::DyadicInterval, d2::DyadicInterval)
     end
 end
 
-function Base.:^(i::DyadicInterval, p::Int64)
+function Base.:^(i::DyadicInterval, p::Int64; precision = 53)
     p < 0 && throw(ArgumentError("Negative exponents not supported yet"))
     lo, hi = low(i), high(i)
     isodd(p) && return DyadicInterval(lo^p, hi^p)
@@ -117,6 +117,17 @@ function Base.:^(i::DyadicInterval, p::Int64)
         hi >= 0 ? (zero(DyadicReal), max(hi^p, lo^p)) : (hi^p, lo^p)
     end
     DyadicInterval(lop, hip)
+end
+
+function Base.inv(i::DyadicInterval; precision = DEFAULT_PRECISION)
+    0 ∈ i && throw(DivideError())
+    lo, hi = low(i), high(i)
+    DyadicInterval(inv(hi, RoundDown; precision), inv(lo, RoundUp; precision))
+end
+
+function Base.:/(i1::DyadicInterval, i2::DyadicInterval; precision = DEFAULT_PRECISION)
+    # TODO: could maybe be faster?
+    i1 * inv(i2; precision)
 end
 
 ###############

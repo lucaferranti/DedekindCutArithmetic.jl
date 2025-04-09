@@ -45,7 +45,7 @@ Refine the given cut to give an approximation with `precision` bits of accuracy.
 If the required accuracy cannot be achieved within `max_iter` iterations, return the current estimate
 with a warning.
 """
-function refine!(::AbstractDedekindReal; precision = 53, max_iter = 1000) end
+function refine!(::AbstractDedekindReal; precision = DEFAULT_PRECISION, max_iter = 1000) end
 
 function Base.show(io::IO, ::MIME"text/plain", d::AbstractDedekindReal)
     i = refine!(d; precision = 53)

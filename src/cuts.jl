@@ -16,7 +16,7 @@ DyadicInterval(d::RationalCauchyCut) = refine!(d)
 """
 Evaluate the Cauchy sequence representing a rational number with `n` bits of precision.
 """
-function refine!(d::RationalCauchyCut; precision = 53, max_iter = 1000)
+function refine!(d::RationalCauchyCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     num = (d.num << precision) ÷ d.den
     DyadicInterval(DyadicReal(num - 1, precision), DyadicReal(num + 1, precision))
 end
@@ -38,7 +38,7 @@ end
 
 DyadicInterval(d::DedekindCut) = d.mpa
 
-function refine!(d::DedekindCut; precision = 53, max_iter = 1000)
+function refine!(d::DedekindCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     for i in 0:max_iter
         width(d) < DyadicReal(1, precision) && return d.mpa
         a1, b1 = thirds(d.mpa)
@@ -67,15 +67,15 @@ end
 
 DyadicInterval(d::UnaryCompositeCut) = d.f(DyadicInterval(d.child))
 
-function refine!(d::UnaryCompositeCut; precision = 53, max_iter = 1000)
+function refine!(d::UnaryCompositeCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     (; f, child) = d
     i = DyadicInterval(child)
-    res = f(i)
+    res = f(i; precision)
     for _ in 0:max_iter
         width(res) < DyadicReal(1, precision) && return res
         p = make_prec(precision + 3, i)
         i = refine!(child, precision = p)
-        res = f(i)
+        res = f(i; precision)
     end
     @warn "Could not reach desired precision within maximum number of iterations, final result may be less accurate than requested"
     return res
@@ -93,17 +93,17 @@ function DyadicInterval(d::BinaryCompositeCut)
     d.f(DyadicInterval(d.child1), DyadicInterval(d.child2))
 end
 
-function refine!(d::BinaryCompositeCut; precision = 53, max_iter = 1000)
+function refine!(d::BinaryCompositeCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     (; f, child1, child2) = d
     i1, i2 = DyadicInterval(child1), DyadicInterval(child2)
-    res = f(i1, i2)
+    res = f(i1, i2; precision)
     for i in 0:max_iter
         width(res) < DyadicReal(1, precision) && return res
         p1 = make_prec(precision + 3, i1)
         p2 = make_prec(precision + 3, i2)
         i1 = refine!(child1, precision = p1)
         i2 = refine!(child2, precision = p2)
-        res = f(i1, i2)
+        res = f(i1, i2; precision)
     end
     @warn "Could not reach desired precision within maximum number of iterations, final result may be less accurate than requested"
     return res
@@ -130,7 +130,7 @@ Base.:*(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut
 
 for op in (:<, :>, :<=, :>=)
     @eval function Base.$op(d1::AbstractDedekindReal, d2::AbstractDedekindReal)
-        p = 53
+        p = DEFAULT_PRECISION
         i1, i2 = DyadicInterval(d1), DyadicInterval(d2)
         while overlaps(i1, i2)
             i1 = refine!(d1; precision = p)
@@ -149,5 +149,5 @@ function Base.sqrt(a::AbstractDedekindReal)
 end
 
 function Base.:^(x::AbstractCut, p::Integer)
-    UnaryCompositeCut(Base.Fix2(^, p), x)
+    UnaryCompositeCut((i; precision) -> ^(i, p; precision), x)
 end
