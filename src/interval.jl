@@ -122,7 +122,7 @@ end
 function Base.inv(i::DyadicInterval; precision = DEFAULT_PRECISION)
     0 ∈ i && throw(DivideError())
     lo, hi = low(i), high(i)
-    DyadicInterval(inv(hi, RoundDown; precision), inv(lo, RoundUp; precision))
+    DyadicInterval(_inv(hi, RoundDown; precision), _inv(lo, RoundUp; precision))
 end
 
 function Base.:/(i1::DyadicInterval, i2::DyadicInterval; precision = DEFAULT_PRECISION)

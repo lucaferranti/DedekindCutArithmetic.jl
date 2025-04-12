@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Support `Base.one` and `Base.zero` for cuts ([#5](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/5))
 - Support `^` operation with non-negative integer exponent ([#4](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/4))
+- Support `inv` and division ([#9](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/9))
 
 ## [v0.1.0](https://github.com/lucaferranti/DedekindCutArithmetic.jl/releases/tag/v0.1.0) -- 2024-10-25
 
