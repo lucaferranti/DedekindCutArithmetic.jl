@@ -23,6 +23,7 @@ isbackward(d::DyadicInterval) = d.hi < d.lo
 "Given the interval ``[a, b]``, return its dual ``[b, a]``."
 dual(d::DyadicInterval) = DyadicInterval(d.hi, d.lo)
 
+Base.in(x::Number, i::DyadicInterval) = min(i.lo, i.hi) <= x <= max(i.lo, i.hi)
 overlaps(i1::DyadicInterval, i2::DyadicInterval) = max(i1.lo, i2.lo) <= min(i1.hi, i2.hi)
 low(i::DyadicInterval) = i.lo
 high(i::DyadicInterval) = i.hi
@@ -120,7 +121,7 @@ function Base.:^(i::DyadicInterval, p::Int64; precision = 53)
 end
 
 function Base.inv(i::DyadicInterval; precision = DEFAULT_PRECISION)
-    0 ∈ i && throw(DivideError())
+    0 ∈ i && throw(DomainError(i, "Interval contains 0"))
     lo, hi = low(i), high(i)
     DyadicInterval(_inv(hi, RoundDown; precision), _inv(lo, RoundUp; precision))
 end

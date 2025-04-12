@@ -65,7 +65,7 @@ end
 
 function Base.inv(
         d::DyadicReal; precision = DEFAULT_PRECISION)
-    iszero(d) && throw(DivideError())
+    iszero(d) && throw(DomainError(d, "Division by zero"))
     RationalCauchyCut(big(1) << d.e, d.m)
     # if iszero(abs(d.m) & (abs(d.m) - 1))
     #     DyadicReal(big(1) << d.e, ilog2(d.m))
@@ -76,7 +76,7 @@ end
 
 function Base.:/(
         d1::DyadicReal, d2::DyadicReal; precision = DEFAULT_PRECISION)
-    iszero(d2) && throw(Divideerror())
+    iszero(d2) && throw(DomainError(d, "Division by zero"))
     RationalCauchyCut((d1.m << d2.e) // (d2.m << d1.e))
 end
 
