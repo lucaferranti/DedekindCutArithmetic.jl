@@ -72,3 +72,21 @@ end
     @test round(BigInt, d2) == ceil(BigInt, d2) == big(4)
     @test floor(BigInt, d2) == big(3)
 end
+
+@testset "inexact arithmetic operations" begin
+    d1 = DyadicReal(1, 2)
+    inv_d1 = inv(d1)
+    @test inv_d1.num == 4
+    @test inv_d1.den == 1
+
+    d2 = DyadicReal(1, 0)
+    d3 = DyadicReal(3, 0)
+
+    rat1 = d1 / d2
+    @test rat1.num == 1
+    @test rat1.den == 4
+
+    rat2 = d1 / d3
+    @test rat2.num == 1
+    @test rat2.den == 12
+end

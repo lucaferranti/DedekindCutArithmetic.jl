@@ -59,3 +59,26 @@ end
     @test DyadicInterval(-2, 2)^3 == DyadicInterval(-8, 8)
     @test DyadicInterval(2, -2)^3 == DyadicInterval(8, -8)
 end
+
+@testset "inexact arithmetic operations" begin
+    i1 = DyadicInterval(1, 3)
+    inv_i1 = inv(i1)
+    @test 1 // 3 - 1 // (big(1) << 52) < low(inv_i1) < 1 // 3
+    @test 1 < high(inv_i1) < 1 + 1 // (big(1) << 52)
+
+    inv_i2 = inv(i1; precision = 80)
+    @test 1 // 3 - 1 // (big(1) << 79) < low(inv_i2) < 1 // 3
+    @test 1 < high(inv_i2) < 1 + 1 // (big(1) << 79)
+
+    i2 = DyadicInterval(-1, 1)
+    @test_throws DomainError inv(i2)
+    @test_throws DomainError i1/i2
+
+    div_int1 = DyadicInterval(1, 1) / DyadicInterval(1, 3)
+    @test 1 // 3 - 1 // (big(1) << 52) < low(div_int1) < 1 // 3
+    @test 1 < high(div_int1) < 1 + 1 // (big(1) << 52)
+
+    div_int2 = /(DyadicInterval(1, 1), DyadicInterval(1, 3); precision = 80)
+    @test 1 // 3 - 1 // (big(1) << 79) < low(div_int2) < 1 // 3
+    @test 1 < high(div_int2) < 1 + 1 // (big(1) << 79)
+end
