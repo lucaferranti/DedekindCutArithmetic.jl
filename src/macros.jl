@@ -13,16 +13,18 @@ end
 """
 Check whether ``∃ x ∈ dom : prop(x)``
 """
-macro ∃(ex)
+macro exists(ex)
     parse_quantifier_body(ex, :exists)
 end
+const var"@∃" = var"@exists"
 
 """
 Check whether ``∀ x ∈ dom : prop(x)``
 """
-macro ∀(ex)
+macro forall(ex)
     parse_quantifier_body(ex, :forall)
 end
+const var"@∀" = var"@forall"
 
 """
 Transformations on the expression before being processed by [`@cut`](@ref)
@@ -72,4 +74,42 @@ macro cut(ex)
     else
         throw(ArgumentError("Invalid cut expression $ex"))
     end
+end
+
+function parse_decimal(s::AbstractString)
+    num_exp = split(s, ('e', 'E'))
+    1 <= length(num_exp) <= 2 || throw(Meta.ParseError("invalid literal $s"))
+    n = first(num_exp)
+    int_dec = split(n, '.')
+    1 <= length(int_dec) <= 2 || throw(Meta.ParseError("invalid literal $s"))
+    num, logden = if length(int_dec) == 2
+        int, dec = int_dec
+        parse(BigInt, int * dec), -length(dec)
+    else
+        parse(BigInt, first(int_dec)), 0
+    end
+    if length(num_exp) == 2
+        logden += parse(BigInt, last(num_exp))
+    end
+    if logden < 0
+        num // 10^(-logden)
+    else
+        num * 10^logden
+    end
+end
+
+"""
+Parse a decimal literal into a Rational{BigInt}
+
+```julia
+julia> exact"0.1"
+1//10
+```
+
+This is needed because literals are already parsed before constructing the AST, hence
+when writing :(x - 0.1) one would get the floating point approximation of 1//10 instead of the
+exact rational.
+"""
+macro exact_str(s::AbstractString)
+    parse_decimal(s)
 end

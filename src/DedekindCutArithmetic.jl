@@ -12,7 +12,8 @@ using ForwardDiff
 export DyadicReal, DyadicInterval, DedekindCut, RationalCauchyCut, BinaryCompositeCut, @cut,
        refine!, dual, overlaps,
        width, midpoint, radius, thirds, low, high, isforward, isbackward,
-       exists, forall, @∀, @∃
+       exists, forall, @∀, @∃, @forall, @exists,
+       @exact_str
 
 const _Real = Union{Integer, AbstractFloat, Rational}
 
