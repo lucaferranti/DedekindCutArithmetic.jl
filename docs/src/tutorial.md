@@ -192,3 +192,42 @@ we can now use that to compute the maximum of ``f(x) = x(1 - x)``, which should 
 ```@repl tutorial1
 my_max(x -> x * (1 - x))
 ```
+
+## Working with float literals
+
+By default, real numbers on compuers are approximately represented via floating point numbers.
+Floats cannot represent all reals exactly and when typing decimals, e.g. `0.1` one does not get the
+exact value, but an approximation
+
+```@repl tutorial1
+a = 0.1
+
+a == 1//10
+
+big(a)
+```
+
+Unfortunately, the parsing of literals in Julia happens already before building the abstract syntax tree,
+hence when processing expressions with macros, the rounding sin has already happened.
+
+For example, the following would fail to terminate
+
+```julia
+@∀ x ∈ [0, 1]: x + 0.1000000000000000000001 > x + 0.1
+```
+
+because when parsing the literals both produce the same floating point number.
+
+```@repl tutorial1
+0.1000000000000000000001 == 0.1
+```
+
+When working with rational numbers in decimal form, use the [`@exact_str`](@ref) string macro, which ensures the literal is parsed to the correct rational number.
+
+```@repl tutorial1
+exact"0.1"
+```
+
+```@repl tutorial1
+@∀ x ∈ [0, 1]: x + exact"0.1000000000000000000001" > x + exact"0.1"
+```
