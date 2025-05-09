@@ -56,6 +56,19 @@ end
     fmax = my_max(f)
     ifmax = refine!(fmax)
     @test ifmax == fmax.mpa
-    @test BigFloat(width(fmax)) <= 0x1p-53
-    @test low(fmax) < 1 // 4 < high(fmax)
+    @test BigFloat(width(ifmax)) <= 0x1p-53
+    @test low(ifmax) < 1 // 4 < high(ifmax)
+end
+
+@testset "exact macro" begin
+    a = exact"0.1"
+    @test a.num == 1
+    @test a.den == 10
+
+    # check denominator doesn't overflow
+    a = exact"0.09999999999999999167332731531132594682276248931884765625"
+    b = 9999999999999999167332731531132594682276248931884765625 // big(10)^56
+
+    @test a.num == numerator(b)
+    @test a.den == denominator(b)
 end

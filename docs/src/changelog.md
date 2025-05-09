@@ -10,6 +10,23 @@ EditURL = "https://github.com/lucaferranti/DedekindCutArithmetic.jl/blob/main/CH
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0]
+
+### Breaking
+
+- Disallow `DyadicInterval` method on other exact reals ([#6](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/6))
+  - **To upgrade**: replace `DyadicInterval(x)` with `refine!(x)`
+- `exact` macro now returns `RationalCaucyCut` instead of `Rational` ([#6](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/6))
+  - **To upgrade**: No change should be needed, all operations should work with the new behavior too. The rational can be obtained using the internal function `parse_decimal`.
+
+### Fixed
+
+- Fixed bug in `exact` string macro to prevent denominator from overflowing ([#6](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/6))
+
+### Added
+
+- Division between cuts and composite exact reals ([#6](https://github.com/lucaferranti/DedekindCutArithmetic.jl/issues/6))
+
 ## [v0.1.1](https://github.com/lucaferranti/DedekindCutArithmetic.jl/releases/tag/v0.1.1) -- 2025-04-13
 
 ### Added

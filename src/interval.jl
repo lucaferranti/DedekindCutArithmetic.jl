@@ -24,11 +24,27 @@ isbackward(d::DyadicInterval) = d.hi < d.lo
 dual(d::DyadicInterval) = DyadicInterval(d.hi, d.lo)
 
 Base.in(x::Number, i::DyadicInterval) = min(i.lo, i.hi) <= x <= max(i.lo, i.hi)
+
+"Whether or not the given dyadic intervals overlap."
 overlaps(i1::DyadicInterval, i2::DyadicInterval) = max(i1.lo, i2.lo) <= min(i1.hi, i2.hi)
+
+"Left endpoint of the dyadic interval."
 low(i::DyadicInterval) = i.lo
+
+"Right endpoint of the dyadic interval."
 high(i::DyadicInterval) = i.hi
+
+"""
+  Width of the dyadic interval.
+
+Note this is always positive, also for improper intervals.
+"""
 width(i::DyadicInterval) = abs(i.hi - i.lo)
+
+"Half the width of the given interval."
 radius(i::DyadicInterval) = width(i) >> 1
+
+"Midpoint of the dyadic interval"
 midpoint(i::DyadicInterval) = (i.lo + i.hi) >> 1
 
 refine!(i::DyadicInterval; precision = DEFAULT_PRECISION, max_iter = 1000) = i
@@ -58,7 +74,7 @@ Base.:-(d::DyadicInterval; precision = DEFAULT_PRECISION) = DyadicInterval(-d.hi
 function Base.:+(d1::AbstractDyadic, d2::AbstractDyadic; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) + low(d2), high(d1) + high(d2))
 end
-function Base.:-(d1::DyadicInterval, d2::DyadicInterval; precision = DEFAULT_PRECISION)
+function Base.:-(d1::AbstractDyadic, d2::AbstractDyadic; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) - high(d2), high(d1) - low(d2))
 end
 

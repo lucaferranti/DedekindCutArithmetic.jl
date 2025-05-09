@@ -11,14 +11,26 @@ end
 RationalCauchyCut(x::Rational) = RationalCauchyCut(numerator(x), denominator(x))
 RationalCauchyCut(x::AbstractFloat) = RationalCauchyCut(rationalize(x))
 
-DyadicInterval(d::RationalCauchyCut) = refine!(d)
-
 """
 Evaluate the Cauchy sequence representing a rational number with `n` bits of precision.
 """
 function refine!(d::RationalCauchyCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     num = (d.num << precision) ÷ d.den
     DyadicInterval(DyadicReal(num - 1, precision), DyadicReal(num + 1, precision))
+end
+
+for op in (:+, :-, :*, :/)
+    @eval function Base.$op(
+            i1::DyadicInterval, c::RationalCauchyCut; precision = DEFAULT_PRECISION)
+        p = make_prec(precision, i1)
+        $op(i1, refine!(c; precision = p); precision = p)
+    end
+
+    @eval function Base.$op(
+            c::RationalCauchyCut, i2::DyadicInterval; precision = DEFAULT_PRECISION)
+        p = make_prec(precision, i2)
+        $op(refine!(c; precision = p), i2; precision = p)
+    end
 end
 
 """
@@ -36,11 +48,9 @@ mutable struct DedekindCut <: AbstractCut
     mpa::DyadicInterval
 end
 
-DyadicInterval(d::DedekindCut) = d.mpa
-
 function refine!(d::DedekindCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     for i in 0:max_iter
-        width(d) < DyadicReal(1, precision) && return d.mpa
+        width(d.mpa) < DyadicReal(1, precision) && return d.mpa
         a1, b1 = thirds(d.mpa)
         low_pred = d.low(a1)
         high_pred = d.high(b1)
@@ -65,17 +75,15 @@ struct UnaryCompositeCut{F} <: AbstractCut
     child::AbstractCut
 end
 
-DyadicInterval(d::UnaryCompositeCut) = d.f(DyadicInterval(d.child))
-
 function refine!(d::UnaryCompositeCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     (; f, child) = d
-    i = DyadicInterval(child)
+    i = refine!(child; precision)
     res = f(i; precision)
     for _ in 0:max_iter
         width(res) < DyadicReal(1, precision) && return res
         p = make_prec(precision + 3, i)
         i = refine!(child, precision = p)
-        res = f(i; precision)
+        res = f(i; precision = p)
     end
     @warn "Could not reach desired precision within maximum number of iterations, final result may be less accurate than requested"
     return res
@@ -89,13 +97,10 @@ struct BinaryCompositeCut{F} <: AbstractCut
     child1::AbstractDedekindReal
     child2::AbstractDedekindReal
 end
-function DyadicInterval(d::BinaryCompositeCut)
-    d.f(DyadicInterval(d.child1), DyadicInterval(d.child2))
-end
 
 function refine!(d::BinaryCompositeCut; precision = DEFAULT_PRECISION, max_iter = 1000)
     (; f, child1, child2) = d
-    i1, i2 = DyadicInterval(child1), DyadicInterval(child2)
+    i1, i2 = refine!(child1; precision), refine!(child2; precision)
     res = f(i1, i2; precision)
     for i in 0:max_iter
         width(res) < DyadicReal(1, precision) && return res
@@ -103,7 +108,7 @@ function refine!(d::BinaryCompositeCut; precision = DEFAULT_PRECISION, max_iter 
         p2 = make_prec(precision + 3, i2)
         i1 = refine!(child1, precision = p1)
         i2 = refine!(child2, precision = p2)
-        res = f(i1, i2; precision)
+        res = f(i1, i2; precision = max(p1, p2))
     end
     @warn "Could not reach desired precision within maximum number of iterations, final result may be less accurate than requested"
     return res
@@ -127,15 +132,16 @@ Base.:-(d::AbstractDedekindReal) = UnaryCompositeCut(-, d)
 Base.:+(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(+, d1, d2)
 Base.:-(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(-, d1, d2)
 Base.:*(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(*, d1, d2)
+Base.:/(d1::AbstractDedekindReal, d2::AbstractDedekindReal) = BinaryCompositeCut(/, d1, d2)
 
 for op in (:<, :>, :<=, :>=)
     @eval function Base.$op(d1::AbstractDedekindReal, d2::AbstractDedekindReal)
         p = DEFAULT_PRECISION
-        i1, i2 = DyadicInterval(d1), DyadicInterval(d2)
+        i1, i2 = refine!(d1; precision = p), refine!(d2; precision = p)
         while overlaps(i1, i2)
+            p *= 2
             i1 = refine!(d1; precision = p)
             i2 = refine!(d2; precision = p)
-            p *= 2
         end
         return $op(i1, i2)
     end
