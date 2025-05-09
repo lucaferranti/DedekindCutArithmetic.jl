@@ -58,7 +58,7 @@ Base.:-(d::DyadicInterval; precision = DEFAULT_PRECISION) = DyadicInterval(-d.hi
 function Base.:+(d1::AbstractDyadic, d2::AbstractDyadic; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) + low(d2), high(d1) + high(d2))
 end
-function Base.:-(d1::DyadicInterval, d2::DyadicInterval; precision = DEFAULT_PRECISION)
+function Base.:-(d1::AbstractDyadic, d2::AbstractDyadic; precision = DEFAULT_PRECISION)
     DyadicInterval(low(d1) - high(d2), high(d1) - low(d2))
 end
 
