@@ -26,7 +26,7 @@ function forall(dom::DyadicInterval, f::Function)::Bool
     low(d) > 0 && f(high(dom)) < 0 && return true
     high(d) < 0 && f(low(dom)) < 0 && return true
 
-    high(f(dom)) < 0 && return true
+    f(dom) < 0 && return true
 
     i1, i2 = split(dom)
     forall(i1, f) && forall(i2, f)

@@ -213,7 +213,7 @@ hence when processing expressions with macros, the rounding sin has already happ
 For example, the following would fail to terminate
 
 ```julia
-@∀ x ∈ [0, 1]: x + 0.1000000000000000000001 > x + 0.1
+@∀ x ∈ ℝ: 0.1000000000000000000001 > 0.1
 ```
 
 because when parsing the literals both produce the same floating point number.
@@ -229,5 +229,5 @@ exact"0.1"
 ```
 
 ```@repl tutorial1
-@∀ x ∈ [0, 1]: x + exact"0.1000000000000000000001" > x + exact"0.1"
+@∀ x ∈ ℝ: exact"0.1000000000000000000001" > exact"0.1"
 ```
