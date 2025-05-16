@@ -52,9 +52,6 @@ d1 - d2
 d1 * d2
 ```
 
-!!! warning "Warning"
-    Division is currently not supported
-
 ## Dyadic interval
 
 There is plenty of real numbers which are not dyadic, for example ``0.1, \sqrt{2},\pi`` and so on so forth. What we will want to do, we will want a [`DyadicInterval`](@ref) ``[a, b]`` with ``a,b`` dyadic reals, which bounds the value we want to approximate. These intervals can be manipulated using interval arithmetic.
@@ -73,9 +70,6 @@ An important thing to notice is that our library relies on *Kaucher interval ari
 ```@repl tutorial1
 i = DyadicInterval(3, 1)
 ```
-
-!!! warning "Warning"
-    Division is currently not supported
 
 ## Defining cuts
 
@@ -125,7 +119,7 @@ It is worth mentioning that for printing, the expression is evaluated to 53 bits
 ```
 
 !!! warning "Warning"
-    Unbounded intervals are not really supported, infinity is replaced by `big(typemax(Int))` during macro expansion.
+    Unbounded intervals are not supported yet, infinity is replaced by `big(typemax(Int))` during macro expansion.
 
 ### Square root as Dedekind cut
 
