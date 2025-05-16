@@ -2,7 +2,7 @@
 Check whether ``∃ x ∈ dom : f(x) < 0``
 """
 function exists(dom::DyadicInterval, f::Function)::Bool
-    f(midpoint(dom)) < 0 && return true
+    f(DyadicInterval(midpoint(dom))) < 0 && return true
 
     # try to avoid bisection by checking for monotonicity
     d = ForwardDiff.derivative(f, dom)
@@ -19,14 +19,14 @@ end
 Check whether ``∀ x ∈ dom : f(x) < 0``
 """
 function forall(dom::DyadicInterval, f::Function)::Bool
-    f(midpoint(dom)) >= 0 && return false
+    f(DyadicInterval(midpoint(dom))) >= 0 && return false
 
     # try to avoid bisection by checking for monotonicity
     d = ForwardDiff.derivative(f, dom)
     low(d) > 0 && f(high(dom)) < 0 && return true
     high(d) < 0 && f(low(dom)) < 0 && return true
 
-    high(f(dom)) < 0 && return true
+    f(dom) < 0 && return true
 
     i1, i2 = split(dom)
     forall(i1, f) && forall(i2, f)

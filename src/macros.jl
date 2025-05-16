@@ -92,18 +92,21 @@ function parse_decimal(s::AbstractString)
         logden += parse(BigInt, last(num_exp))
     end
     if logden < 0
-        num // 10^(-logden)
+        num // big(10)^(-logden)
     else
-        num * 10^logden
+        num * big(10)^logden
     end
 end
 
 """
-Parse a decimal literal into a Rational{BigInt}
+Parse a decimal literal into an exact real
 
 ```julia
-julia> exact"0.1"
-1//10
+julia> a = exact"0.1"
+[0.099999999999999867, 0.10000000000000009]
+
+julia> refine!(a; precision = 80)
+[0.099999999999999992, 0.10000000000000001]
 ```
 
 This is needed because literals are already parsed before constructing the AST, hence
@@ -111,5 +114,5 @@ when writing :(x - 0.1) one would get the floating point approximation of 1//10 
 exact rational.
 """
 macro exact_str(s::AbstractString)
-    parse_decimal(s)
+    RationalCauchyCut(parse_decimal(s))
 end
